@@ -1,9 +1,10 @@
 import pygame as pg
-import sys
 import numpy as np
 
-
 screen_dim = np.array([1000,1000])
+
+matrix = np.zeros((1000,1000))
+
 screen_certer = np.array([500,500])
 black = np.array([0,0,0])
 white = np.array([255,255,255])
@@ -25,29 +26,6 @@ Grass  = np.array([80,250,80]);
 Leaf   = np.array([80,150,80]);
 rainbow = [Red,Orange,Yellow,Green,Blue, Indigo,Violet,Trunk,Grass,Leaf]
 
-
-
-def quit():
-    sys.exit()
-
-key_map = {
-    pg.K_q:quit
-    }
-
-def entries():
-    for event in pg.event.get():
-        if event.type == pg.KEYDOWN:
-            if event.key in key_map:
-                func = key_map[event.key]
-                func()
-            else:
-                print("invalid")
-
-def timer(screen):
-    i = pg.time.get_ticks()
-    my_font = pg.font.SysFont('Arial', 30)
-    time_text = my_font.render(str(i) , False, black)
-    screen.blit(time_text,np.array([0,0]))
 
 def line(screen):
     i = 100
@@ -84,6 +62,26 @@ def alpha_circle(screen):
 def circle(screen):
     pg.draw.circle(screen,center=screen_certer,color=green,radius=100)
 
+def square(screen):
+    position = [500,500]
+    size = [100,100]
+    rec = pg.Rect(position,size)
+    pg.draw.rect(screen,black,rec)
+    return rec
+
+def triangle(screen):
+    points = [[500,500],
+              [500,530],
+              [530,530]]
+    pg.draw.polygon(screen, black,points,width=1)
+
+
+def poligon(screen,points):
+    pg.draw.polygon(screen, black,points,width=1)
+
+def point(screen,position):
+    pg.draw.circle(screen,center= position,color=red,radius=5)
+
 def rainbow_circles(screen):
     i=0
     while True:
@@ -91,25 +89,3 @@ def rainbow_circles(screen):
         pg.draw.circle(screen,center=screen_certer + [20*i,0],color=rainbow[i],radius=10)
         i +=1
         yield None
-        
-
-def main():
-    pg.init()
-    screen = pg.display.set_mode(screen_dim)
-    screen.fill(color=white)
-    gen = rainbow_circles(screen)
-    while True:
-        # screen.fill(white)
-        entries()
-        timer(screen)
-        # line(screen)
-        # clock(screen)
-        # reverse_clock(screen)
-        # circle(screen)
-        # alpha_circle(screen)
-        # next(gen)
-        next(gen)
-        pg.display.flip()
-
-if __name__ == '__main__':
-    main()
